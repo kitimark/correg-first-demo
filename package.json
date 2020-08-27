@@ -2,5 +2,10 @@
   "name": "catch-mysql-event",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@rodrigogs/mysql-events": "^0.6.0",
+    "mysql": "^2.18.1",
+    "ora": "^5.0.0"
+  }
 }
