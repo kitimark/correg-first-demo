@@ -10,7 +10,9 @@ create table if not exists course
 	seclec text null,
 	seclab text null,
 	crelec text null,
-	crelab text null
+	crelab text null,
+	room text null,
+	max int null
 );
 
 create table if not exists instructor
