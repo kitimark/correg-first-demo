@@ -1,5 +1,7 @@
 create database if not exists regv2;
 
+use regv2;
+
 create table if not exists course
 (
 	id int auto_increment
