@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: first-project-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anti-coruption-layer
+  namespace: first-project-demo
+spec:
+  selector:
+    matchLabels:
+      app: anti-coruption-layer
+  template:
+    metadata:
+      labels:
+        app: anti-coruption-layer
+    spec:
+      containers:
+      - name: anti-coruption-layer
+        image: anti-coruption-layer:0.0.2
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: mysql-root-password
+          - name: LEGACY_MYSQL_URL
+            value: mysql://root:$(MYSQL_PASSWORD)@mysql.first-project-demo.svc.cluster.local:3306/regv1
+          - name: NEW_MYSQL_URL
+            value: mysql://root:$(MYSQL_PASSWORD)@mysql.first-project-demo.svc.cluster.local:3306/regv2
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: mysql 
+  namespace: first-project-demo 
+spec:
+  chart:
+    repository: https://charts.bitnami.com/bitnami
+    name: mysql 
+    version: 6.14.8
+  resetValues: false
+  releaseName: mysql
+  forceUpgrade: true
+  values:  
+    service:
+      type: NodePort
+      nodePort:
+        master: 31101
+        slave: 31102
+    root:
+      password: o1q0xH4uvB
+      forcePassword: true
+    db:
+      password: oqymGL5LA9
+      forcePassword: true
+    replication:
+      password: s45Hhci8Li
+      forcePassword: true
