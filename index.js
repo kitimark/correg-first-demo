@@ -56,7 +56,7 @@ const program = async () => {
         )
 
         // hack because it fast to run sql query
-        await sleep(20)
+        await sleep(50)
 
         slaveConnection.query({
           sql: 'UPDATE course SET ? ORDER BY id DESC LIMIT 1',
